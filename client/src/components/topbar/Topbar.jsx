@@ -34,8 +34,10 @@ export default function Topbar() {
             <span className="topbarIconBadge">1</span>
           </div>
           <div className="topbarIconItem">
-            <Chat />
+          <Link to="/messages" style={{ textDecoration: "none", color: "white" }}>
+            <Chat/>
             <span className="topbarIconBadge">2</span>
+          </Link>
           </div>
           <div className="topbarIconItem">
             <Notifications />

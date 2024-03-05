@@ -1,12 +1,33 @@
 const router = require("express").Router();
 const User = require("../models/Users");
-const bcrypt = require("bcrypt");
+const Conversation = require("../models/Conversation");
+const Messages = require("../models/Messages");
+const bcrypt = require("bcryptjs");
 
 router.get("/", (req, res)=>{
+
     res.send("user route");
 })
 
 //update user
+
+
+router.get("/conversations/:id", async (req, res)=>{
+    try{
+        const cons = await Conversation.find({users: req.params.id});
+        res.status(200).json(cons);
+
+    }catch(err){
+        res.status(500).json(err);
+    }
+})
+
+
+
+
+
+
+
 router.put("/:id", async (req, res)=>{
     if(req.body.userId === req.params.id || req.body.isAdmin){
         if(req.body.password){

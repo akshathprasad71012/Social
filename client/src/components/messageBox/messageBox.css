@@ -1,0 +1,34 @@
+.messageContainer{
+
+    width: 100%;
+    padding-bottom: 2%;
+    background-color: white;
+
+}
+
+.messageContainer:after { 
+    content: " "; 
+    display: block;
+    clear: both;
+} 
+
+.messagebubbleBlue{
+    background-color: rgb(70, 70, 245);
+    padding: 1% 1%;
+    width: fit-content;
+
+    border-radius: 10px 0 10px 10px;
+    float: right;
+    color: white;
+
+}
+
+.messagebubbleGrey{
+    background-color: #e6e7e8;
+    padding: 1% 1%;
+    width: fit-content;
+    border-radius: 0 10px 10px 10px;
+    clear: right;
+
+
+}

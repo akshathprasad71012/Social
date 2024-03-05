@@ -19,7 +19,7 @@ export default function Profile() {
     };
     fetchUser();
   }, [username]);
-
+{console.log("\n\n\n\n\n\n\n" + user.profilePicture+ "\n\n\n\n\n\n\n");}
   return (
     <>
       <Topbar />
@@ -53,7 +53,7 @@ export default function Profile() {
             </div>
           </div>
           <div className="profileRightBottom">
-            <Feed username={"akshath"} />
+            <Feed username={username} />
             <Rightbar user={user} />
           </div>
         </div>
