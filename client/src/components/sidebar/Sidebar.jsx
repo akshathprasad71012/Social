@@ -10,10 +10,27 @@ import {
   Event,
   School,
 } from "@material-ui/icons";
-import { Users } from "../../dummyData";
+// import { Users } from "../../dummyData";
 import CloseFriend from "../closeFriend/CloseFriend";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Sidebar() {
+
+  const [Users, setUsers] = useState([]);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await axios.get(`/users/all`);
+      
+      setUsers(res.data.filter(u => user.followings.includes(u.id)));
+    };
+    fetchUsers();
+  }, [user]);
+
+
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -59,7 +76,7 @@ export default function Sidebar() {
         <hr className="sidebarHr" />
         <ul className="sidebarFriendList">
           {Users.map((u) => (
-            <CloseFriend key={u.id} user={u} />
+            <CloseFriend key={u.id} user={u}/>
           ))}
         </ul>
       </div>

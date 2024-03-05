@@ -26,6 +26,23 @@ const AuthReducer = (state, action) => {
           followings: [...state.user.followings, action.payload],
         },
       };
+    case "COVERUPDATE":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          coverPicture: action.payload,
+        },
+      };
+      case "PROFILEUPDATE":
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            profilePicture: action.payload,
+          },
+        };
+    
     case "UNFOLLOW":
       return {
         ...state,

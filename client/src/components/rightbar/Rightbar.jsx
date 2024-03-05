@@ -6,16 +6,19 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { Add, Remove } from "@material-ui/icons";
+import CloseFriend from "../closeFriend/CloseFriend";
 
 export default function Rightbar({ user }) {
-  console.log(user);
+  //console.log(user);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
-  const [followed, setFollowed] = useState(
-    currentUser.followings.includes(user?.id)
-  );
 
+  const [followed, setFollowed] = useState(
+    (currentUser.followings.includes(user?._id)) ? true : false
+  );
+    //console.log("---------> ",currentUser.followings.includes(user?._id), followed);
   useEffect(() => {
     const getFriends = async () => {
       try {
@@ -28,8 +31,24 @@ export default function Rightbar({ user }) {
     getFriends();
   }, [user]);
 
+
+  useEffect(() => {
+    const getAllUsers = async () => {
+      try {
+        const userlist = await axios.get("/users/all");
+        
+        setAllUsers(userlist.data.filter(user => user.id != currentUser._id));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAllUsers();
+  }, [user]);
+
+
   const handleClick = async () => {
     try {
+      //console.log(currentUser.followings.includes(user?._id), followed);
       if (followed) {
         await axios.put(`/users/${user._id}/unfollow`, {
           userId: currentUser._id,
@@ -42,6 +61,7 @@ export default function Rightbar({ user }) {
         dispatch({ type: "FOLLOW", payload: user._id });
       }
       setFollowed(!followed);
+      //console.log(currentUser.followings.includes(user?._id));
     } catch (err) {
     }
   };
@@ -55,25 +75,38 @@ export default function Rightbar({ user }) {
             <b>Pola Foster</b> and <b>3 other friends</b> have a birhday today.
           </span>
         </div>
-        <img className="rightbarAd" src="assets/ad.png" alt="" />
-        <h4 className="rightbarTitle">Online Friends</h4>
+        
+        <h4 className="rightbarTitle">People You Might Like</h4>
         <ul className="rightbarFriendList">
-          {Users.map((u) => (
-            <Online key={u.id} user={u} />
+          {allUsers.map((u) => (
+            
+            <CloseFriend key={u.id} user={u}/>
           ))}
         </ul>
       </>
     );
   };
-
+  
   const ProfileRightbar = () => {
+    //console.log("follow button" + user.username !== currentUser.username);
     return (
       <>
         {user.username !== currentUser.username && (
-          <button className="rightbarFollowButton" onClick={handleClick}>
-            {followed ? "Unfollow" : "Follow"}
-            {followed ? <Remove /> : <Add />}
-          </button>
+          (
+            followed ? (
+                <button className="rightbarFollowButton" onClick={handleClick} style={{backgroundColor: 'red'}} > 
+                  Unfollow
+                </button>
+            )
+            : ( 
+              <button className="rightbarFollowButton" onClick={handleClick} > 
+                  Follow
+                </button>
+             )
+
+          )
+
+          
         )}
         <h4 className="rightbarTitle">User information</h4>
         <div className="rightbarInfo">

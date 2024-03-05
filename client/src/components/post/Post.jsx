@@ -19,7 +19,7 @@ export default function Post({ post }) {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.get(`/users?userId=${post.userId}`);
+      const res = await axios.get(`/users/${post.userId}`);
       setUser(res.data);
     };
     fetchUser();
@@ -37,7 +37,7 @@ export default function Post({ post }) {
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <Link to={`/profile/${user.username}`}>
+            <Link to={`/profile/${user.username}`}  style={{ textDecoration: 'none', display: 'flex'}}>
               <img
                 className="postProfileImg"
                 src={
@@ -47,8 +47,9 @@ export default function Post({ post }) {
                 }
                 alt=""
               />
-            </Link>
+            
             <span className="postUsername">{user.username}</span>
+            </Link>
             <span className="postDate">{format(post.createdAt)}</span>
           </div>
           <div className="postTopRight">

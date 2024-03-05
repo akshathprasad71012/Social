@@ -3,10 +3,25 @@ const User = require("../models/Users");
 const Conversation = require("../models/Conversation");
 const Messages = require("../models/Messages");
 const bcrypt = require("bcryptjs");
+const Users = require("../models/Users");
 
-router.get("/", (req, res)=>{
+router.get("/all", async (req, res)=>{
+    try{
+        const result = await Users.find();
+        result_usernames = []
+        result.forEach(user => {
+            result_usernames.push({
+                id: user.id,
+                profilePicture: user.profilePicture,
+                username: user.username
+            });
+        })
+        res.status(200).json(result_usernames);
 
-    res.send("user route");
+    }catch(err){
+        res.status(500).json(err);
+    }
+    
 })
 
 //update user
@@ -65,7 +80,7 @@ router.delete("/:id", async (req, res)=>{
         return res.status(403).json("only delete ur account")
     }
 })
-//get a user
+//get a user by id
 router.get("/:id", async (req, res)=>{
     try{
         const user = await User.findById(req.params.id);
@@ -75,6 +90,18 @@ router.get("/:id", async (req, res)=>{
         res.status(500).json(err)
     }
 })
+//get user by username
+
+router.get("/username/:username", async (req, res)=>{
+    try{
+        const user = await User.findOne({username: req.params.username});
+        const {password, updatedAt, ...other} = user._doc;
+        res.status(200).json(other);
+    }catch(err){
+        res.status(500).json(err)
+    }
+})
+
 //follow user
 router.put("/:id/follow", async (req, res)=>{
     if(req.body.userId !== req.params.id){
